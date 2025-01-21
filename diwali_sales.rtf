@@ -1,0 +1,189 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\b\f0\fs22\lang9 USE DATABASE \par
+\b0 ***use diwali_sales;\b\par
+\par
+************************************Easy Level************************************\b0\par
+
+\pard\sa200\sl276\slmult1\tx3150 ==>How many unique users made purchases during Diwali sales?\par
+
+\pard\sa200\sl276\slmult1 SELECT COUNT(DISTINCT User_ID) AS unique_users\par
+FROM diwali_sales_data;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+==>What is the total amount spent during Diwali sales?\par
+SELECT SUM(Amount) AS total_amount\par
+FROM diwali_sales_data;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+==>Which state had the highest sales during Diwali?\par
+select State, sum(Amount)\par
+from diwali_sales_data\par
+group by State\par
+order by sum(Amount) desc \par
+limit 1;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+==>How many different product categories were sold during Diwali?\par
+SELECT COUNT(DISTINCT product_category) AS unique_categories\par
+FROM diwali_sales_data;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+==>How many orders were placed by each age group?\par
+select age_group, count(*)\par
+from diwali_sales_data\par
+group by Age_Group;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+==>What is the average age of customers who made purchases during Diwali?\par
+select avg(Age) as avg_Age\par
+from diwali_sales_data;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+==>How many male and female customers made purchases during Diwali?\par
+select gender, count(distinct(User_ID) ) as Cust_Count\par
+from diwali_sales_data\par
+group by gender;\par
+\par
+\b ********************************Intermediate  Level********************************\par
+\b0 ==>Which customer had the highest total amount of purchases during Diwali sales?\par
+select user_Id, sum(amount)\par
+from diwali_sales_data\par
+group by User_ID\par
+order by sum(Amount) desc\par
+limit 1;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+==>What is the average order amount during Diwali sales?\par
+SELECT AVG(amount) AS average_order_amount\par
+FROM diwali_sales_data;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+==>Which occupation group made the highest number of purchases during Diwali?\par
+SELECT Occupation, count(*) As highest_no_purchase\par
+FROM diwali_sales_data\par
+GROUP BY Occupation\par
+ORDER BY SUM(amount) DESC\par
+LIMIT 1;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+==>What is the percentage of married customers among all the customers who made purchases during Diwali?\par
+SELECT (COUNT(DISTINCT user_id) / COUNT(DISTINCT CASE WHEN marital_status = 'Married' THEN user_id END)) * 100 AS percentage_married_customers\par
+FROM diwali_sales_data;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+==>Which zone had the highest average order amount during Diwali?\par
+select zone, avg(amount)\par
+from diwali_sales_data\par
+group by zone\par
+order by avg(Amount) desc\par
+limit 1;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+-- ==>How much sales  amount made by only  repeat user (more than one order) during Diwali? \par
+SELECT SUM(amount) AS repeat_user_sales_amount\par
+FROM (\par
+    SELECT user_id, COUNT(DISTINCT orders) AS order_count, SUM(amount) AS amount\par
+    FROM diwali_sales_data\par
+    GROUP BY user_id\par
+    HAVING COUNT(DISTINCT orders) > 1\par
+) AS repeat_users;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+==>What is the total sales amount for each product category during Diwali?\par
+select Product_Category, sum(Amount)\par
+from diwali_sales_data\par
+group by Product_Category;\par
+\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+\b ************************************Hard Level************************************\par
+\b0 -->What is the distribution of sales across different age groups and genders during Diwali?\par
+SELECT age_group, gender, SUM(amount) AS total_sales\par
+FROM diwali_sales_data\par
+GROUP BY age_group, gender;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+-- > Which occupation group had the highest average order amount during Diwali?\par
+select Occupation, avg(amount)\par
+from diwali_sales_data\par
+group by Occupation\par
+order by avg(Amount) descs\par
+limit 1;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+-->How many customers from each state made repeat purchases (more than one order) during Diwali?\par
+SELECT STATE, count(distinct User_ID) AS REPEAT_PURCHASES\par
+FROM diwali_sales_data\par
+GROUP BY STATE\par
+having count(Orders) > 1;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+-- >Which product category had the highest average order amount during Diwali?\par
+SELECT PRODUCT_CATEGORY, AVG(Amount)\par
+FROM diwali_sales_data\par
+group by Product_Category\par
+order by AVG(Amount) desc\par
+limit 1;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+-->How does the sales performance vary across different zones during Diwali?\par
+SELECT Zone, sum(Amount) AS ZONES_SALES\par
+from diwali_sales_data\par
+group by Zone;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+What is the average age of customers who made purchases for each product category during Diwali?\par
+SELECT Product_Category, avg(Age) AS AVG_AGE \par
+from diwali_sales_data\par
+group by Product_Category;\par
+\par
+\b *********************************ADVANCE  Level*********************************\par
+\b0 -->Calculate the total sales amount for each product category, sorted in descending order.\par
+select PRODUCT_CATEGORY, sum(Amount)\par
+FROM diwali_sales_data\par
+group by Product_Category\par
+order by Product_Category desc;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+-->Determine the average age and the average amount spent by male and female customers in each age group.\par
+select  Gender, Age_Group, AVG(Age), AVG(Amount)\par
+FROM diwali_sales_data\par
+GROUP by Gender, AGE_GROUP;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+-->Find the top 5 states with the highest total sales amount, along with the count of customers from each state.\par
+select State ,count(distinct USER_ID) AS DISTINCT_USER , SUM(Amount)\par
+FROM diwali_sales_data\par
+group by State\par
+order by SUM(Amount) desc\par
+limit  5;\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+-->Calculate the average amount spent by customers in each occupation, considering only customers aged between 25 and 40 (inclusive).\par
+-------------------------------------------------------------------------------------------------------------------\par
+-------------------------------------------------------------------------------------------------------------------\par
+\par
+\par
+}
+ 
